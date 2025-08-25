@@ -9,7 +9,7 @@ permalink: /articles/
 <ul>
   {% for article in site.articles %}
     <li>
-      <a href="{{ article.url }}">{{ article.title }}</a>
+      <a href="{{ article.url | relative_url }}">{{ article.title }}</a>
     </li>
   {% endfor %}
 </ul>

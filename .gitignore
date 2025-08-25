@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Node / npm（テーマ編集で使うことがある場合）
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ruby / Bundler
+.bundle/
+vendor/
+Gemfile.lock
+
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# VSCode / IDE 系
+.vscode/
+.idea/
+*.swp
+*.swo
