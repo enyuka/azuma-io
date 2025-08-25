@@ -3,3 +3,8 @@ theme: minima
 url: "https://username.github.io"
 baseurl: "/azuma-edh"
 
+collections:
+  articles:
+    output: true
+    permalink: /:collection/:name/
+
