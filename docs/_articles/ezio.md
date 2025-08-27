@@ -35,7 +35,7 @@ MTG 歴として高校生くらいのときにインベージョンとかプレ�
 こうした激動の人生を描く三部作は「エツィオ・サーガ」と呼ばれ、シリーズでも特におすすめできる作品群です。
 
 デッキはこんな感じです。
-<iframe src="https://moxfield.com/embed/zijL3hwN9U-b0f1T2-2BBg" frameBorder="1" height="400px" width="800px"></iframe>
+<iframe src="https://moxfield.com/embed/zijL3hwN9U-b0f1T2-2BBg?sortBy=manaCost&hideTotal=true&includeMana=true" frameBorder="1" height="600px" width="800px"></iframe>
 
 クロタカさんのデッキ紹介を参考に、いじりまくったデッキ。
 
