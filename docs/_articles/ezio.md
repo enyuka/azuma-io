@@ -79,7 +79,7 @@ MTG 歴として高校生くらいのときにインベージョンとかプレ�
 
 序盤はエツィオの威迫と強力なスタッツで攻められますが、大きくパワーが上がるカードではないのでエツィオ単体で勝ち切るのは難しいです。
 
-恒常的にブロックされない状態を得られてどんどん大きくなる<span class="card-hover" data-scry="acr/49/ja">バシム・イブン・イスハーク</span>、二段攻撃を付与してくれるレオニダスの槍や<span class="card-hover" data-scry="acr/50/ja">シワのバエク</span>、特殊勝利をもたらす<span class="card-hover" data-scry="acr/1560/ja">暗殺卿、ラムセス(Basim, Master Assassin)</span>や<span class="card-hover" data-scry="xin/117/ja">富の享楽</span>など臨機応変に勝利を目指しましょう。
+恒常的にブロックされない状態を得られてどんどん大きくなる<span class="card-hover" data-scry="acr/49/ja">バシム・イブン・イスハーク</span>、二段攻撃を付与してくれるレオニダスの槍や<span class="card-hover" data-scry="acr/50/ja">シワのバエク</span>、特殊勝利をもたらす<span class="card-hover" data-scry="acr/1560/en">暗殺卿、ラムセス(Basim, Master Assassin)</span>や<span class="card-hover" data-scry="xin/117/ja">富の享楽</span>など臨機応変に勝利を目指しましょう。
 
 ### カードを集めるのが大変
 
