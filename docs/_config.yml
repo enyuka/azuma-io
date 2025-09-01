@@ -3,8 +3,8 @@ theme: minima
 url: "https://username.github.io"
 baseurl: "/azuma-edh"
 
-include:
-  - _includes
+header_pages:
+  - about.md
 
 collections:
   articles:
