@@ -1,6 +1,6 @@
 (function () {
   const isTouch = matchMedia("(pointer: coarse)").matches;
-  if (isTouch) return; // スマホ等は無効（必要なら外してOK）
+  // if (isTouch) return; // スマホ等は無効（必要なら外してOK）
 
   let tip, hideTimer, showTimer;
 
