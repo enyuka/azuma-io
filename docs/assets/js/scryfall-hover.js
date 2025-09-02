@@ -1,6 +1,8 @@
 (function () {
   const isTouch = matchMedia("(pointer: coarse)").matches;
-  // if (isTouch) return; // スマホ等は無効（必要なら外してOK）
+
+  // スマホ等は無効
+  if (isTouch) return;
 
   let tip, hideTimer, showTimer;
 
@@ -69,13 +71,15 @@
     if (y + h > vh - margin) y = e.clientY - h - margin;
 
     tip.style.left = x + 'px';
-    tip.style.top  = y + 'px';
+    tip.style.top = y + 'px';
   };
 
-  const attach = (root=document) => {
+  const attach = (root = document) => {
     root.querySelectorAll('.card-hover').forEach(el => {
       el.addEventListener('mouseenter', (e) => show(el, e));
-      el.addEventListener('mousemove',  (e) => { if (tip?.classList.contains('show')) position(e); });
+      el.addEventListener('mousemove', (e) => {
+        if (tip?.classList.contains('show')) position(e);
+      });
       el.addEventListener('mouseleave', hide);
       el.addEventListener('click', hide);
     });
@@ -85,9 +89,11 @@
   attach();
   // ページ内で後から追加された場合
   const mo = new MutationObserver(() => attach());
-  mo.observe(document.body, { childList: true, subtree: true });
+  mo.observe(document.body, {childList: true, subtree: true});
 
   // スクロール/ESCで閉じる
-  window.addEventListener('scroll', hide, { passive: true });
-  window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') hide(); });
+  window.addEventListener('scroll', hide, {passive: true});
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') hide();
+  });
 })();
