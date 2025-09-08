@@ -78,6 +78,10 @@ img {
     margin: 1rem auto;
 }
 
+.back-link {
+    text-align: center;
+}
+
 .embed-moxfield {
     width: 100%;
     max-width: 100%;
