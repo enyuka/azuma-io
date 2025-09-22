@@ -116,6 +116,35 @@ img {
     color: #444;
 }
 
+/* 既存 .sf-preview はそのまま。スマホ用の中央モーダル表示 */
+.sf-preview.touch {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) !important;
+    width: min(90vw, 420px);
+    max-height: 85vh;
+    max-width: 90vw;
+    background: #0000;
+    z-index: 10001; /* backdrop より上 */
+}
+
+/* クリックで閉じる用の半透明背景 */
+.sf-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s ease;
+    z-index: 10000;
+}
+.sf-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* 既存のPC用プレビュー（ホバー）を少し上にスライドさせる演出 */
+.sf-preview.show { opacity: 1; transform: translate(12px, 8px); }
 
 @media (max-width: 600px) {
     body {
@@ -134,4 +163,6 @@ img {
     .embed-moxfield iframe {
         height: clamp(520px, 82vh, 1200px);
     }
+
+    .sf-preview img { border-radius: 8px; }
 }

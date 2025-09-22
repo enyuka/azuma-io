@@ -1,99 +1,132 @@
-(function () {
-  const isTouch = matchMedia("(pointer: coarse)").matches;
+(() => {
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  let preview, backdrop;
+  let currentTarget = null;
+  let hideTimer = null;
 
-  // スマホ等は無効
-  if (isTouch) return;
-
-  let tip, hideTimer, showTimer;
-
-  const srcFromEl = (el) => {
-    if (el.dataset.scry) {
-      // セット/番号/言語 指定（例: acr/113/ja）
-      return `https://api.scryfall.com/cards/${el.dataset.scry}?format=image&version=large`;
+  function ensureNodes() {
+    if (!preview) {
+      preview = document.createElement('div');
+      preview.className = 'sf-preview';
+      document.body.appendChild(preview);
     }
-    if (el.dataset.card) {
-      // 名前一致（英語名推奨・exact）
-      const q = encodeURIComponent(el.dataset.card);
-      return `https://api.scryfall.com/cards/named?exact=${q}&format=image&version=large`;
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'sf-backdrop';
+      document.body.appendChild(backdrop);
+      backdrop.addEventListener('click', hideTouchPreview, { passive: true });
     }
-    return null;
-  };
+  }
 
-  const createTip = () => {
-    tip = document.createElement('div');
-    tip.className = 'sf-preview';
-    document.body.appendChild(tip);
-  };
+  function imgUrlFrom(el) {
+    // data-scry="set/num/lang" 例: "acr/113/ja"
+    const key = el.getAttribute('data-scry') || '';
+    // version は必要に応じて変更可: normal/large/small/png
+    return `https://api.scryfall.com/cards/${key}?format=image&version=large`;
+  }
 
-  const show = (el, e) => {
-    clearTimeout(hideTimer);
-    clearTimeout(showTimer);
-    if (!tip) createTip();
+  function showHoverPreview(e, el) {
+    ensureNodes();
+    currentTarget = el;
+    preview.classList.remove('touch');
+    preview.innerHTML = `<img alt="" loading="lazy" src="${imgUrlFrom(el)}">`;
+    const x = e.clientX + 12;
+    const y = e.clientY + 12;
+    Object.assign(preview.style, { left: x + 'px', top: y + 'px' });
+    preview.classList.add('show');
+    // PCでは backdrop は使わない
+  }
 
-    const src = srcFromEl(el);
-    if (!src) return;
+  function moveHoverPreview(e) {
+    if (!preview || !preview.classList.contains('show') || preview.classList.contains('touch')) return;
+    const x = e.clientX + 12;
+    const y = e.clientY + 12;
+    Object.assign(preview.style, { left: x + 'px', top: y + 'px' });
+  }
 
-    // 遅延してふわっと
-    showTimer = setTimeout(() => {
-      // 画像貼り替え（同一なら再読込しない）
-      const cur = tip.querySelector('img')?.getAttribute('src');
-      if (cur !== src) {
-        tip.innerHTML = '';
-        const img = document.createElement('img');
-        img.loading = 'lazy';
-        img.alt = el.dataset.card || el.dataset.scry || 'card';
-        img.src = src;
-        tip.appendChild(img);
-      }
-      position(e);
-      tip.classList.add('show');
-    }, 120);
-  };
+  function hideHoverPreview() {
+    if (!preview) return;
+    preview.classList.remove('show');
+    currentTarget = null;
+  }
 
-  const hide = () => {
-    clearTimeout(showTimer);
-    hideTimer = setTimeout(() => {
-      tip && tip.classList.remove('show');
-    }, 60);
-  };
+  // ---- タッチ（スマホ）: タップで中央表示、外側タップで閉じる ----
+  function toggleTouchPreview(el) {
+    ensureNodes();
+    const isOpen = preview.classList.contains('show') && preview.classList.contains('touch');
+    const same = (currentTarget === el);
+    if (isOpen && same) {
+      hideTouchPreview();
+      return;
+    }
+    currentTarget = el;
+    preview.classList.add('touch');
+    preview.innerHTML = `<img alt="" loading="lazy" src="${imgUrlFrom(el)}">`;
+    preview.classList.add('show');
+    backdrop.classList.add('show');
 
-  const position = (e) => {
-    if (!tip) return;
-    const margin = 12;
-    const w = tip.offsetWidth || 360;
-    const h = tip.offsetHeight || 500;
-    let x = e.clientX + margin;
-    let y = e.clientY + margin;
-
-    // 右端・下端ははみ出しを抑制
-    const vw = window.innerWidth, vh = window.innerHeight;
-    if (x + w > vw - margin) x = e.clientX - w - margin;
-    if (y + h > vh - margin) y = e.clientY - h - margin;
-
-    tip.style.left = x + 'px';
-    tip.style.top = y + 'px';
-  };
-
-  const attach = (root = document) => {
-    root.querySelectorAll('.card-hover').forEach(el => {
-      el.addEventListener('mouseenter', (e) => show(el, e));
-      el.addEventListener('mousemove', (e) => {
-        if (tip?.classList.contains('show')) position(e);
-      });
-      el.addEventListener('mouseleave', hide);
-      el.addEventListener('click', hide);
+    // スクロールや戻る操作で閉じたい時
+    requestAnimationFrame(() => {
+      document.addEventListener('keydown', escToClose, { once: true });
     });
-  };
+  }
 
-  // 初期化
-  attach();
-  // ページ内で後から追加された場合
-  const mo = new MutationObserver(() => attach());
-  mo.observe(document.body, {childList: true, subtree: true});
+  function hideTouchPreview() {
+    if (!preview) return;
+    preview.classList.remove('show', 'touch');
+    backdrop.classList.remove('show');
+    currentTarget = null;
+  }
 
-  // スクロール/ESCで閉じる
-  window.addEventListener('scroll', hide, {passive: true});
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') hide();
-  });
+  function escToClose(e) {
+    if (e.key === 'Escape') hideTouchPreview();
+  }
+
+  // ---- 初期化：.card-hover を拾ってイベント付与 ----
+  function bind(el) {
+    // 既存クラスがなければ見た目用に付与
+    el.classList.add('card-hover');
+
+    if (isCoarse) {
+      // スマホ/タブレット：タップで開閉
+      el.addEventListener('click', (ev) => {
+        ev.preventDefault(); // 文字リンク化してる場合の遷移防止
+        ev.stopPropagation();
+        toggleTouchPreview(el);
+      }, { passive: false });
+
+      // ページのどこかをタップしたら閉じる（カード画像以外）
+      document.addEventListener('click', (ev) => {
+        if (!preview || !preview.classList.contains('show')) return;
+        const withinPreview = preview.contains(ev.target);
+        const withinTrigger = el.contains(ev.target);
+        if (!withinPreview && !withinTrigger) hideTouchPreview();
+      }, { passive: true });
+
+      // スクロールで閉じる（好みで）
+      window.addEventListener('scroll', hideTouchPreview, { passive: true });
+    } else {
+      // PC：ホバーで表示・移動、外れたら隠す
+      el.addEventListener('mouseenter', (e) => {
+        clearTimeout(hideTimer);
+        showHoverPreview(e, el);
+      });
+      el.addEventListener('mousemove', moveHoverPreview);
+      el.addEventListener('mouseleave', () => {
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(hideHoverPreview, 100);
+      });
+    }
+  }
+
+  function init() {
+    const targets = document.querySelectorAll('.card-hover[data-scry], [data-scry].card-hover, [data-scry]:not(.card-hover)');
+    targets.forEach(bind);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
