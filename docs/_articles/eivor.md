@@ -2,7 +2,7 @@
 layout: post
 title: "アサシンクリードのオタク、一番好きなアサシンのエイヴォルで EDH デッキを組む"
 data: 2025-09-09
-image: /images/eivor/3.jpg
+image: /images/eivor/3.jpg?v=2
 ---
 僕はアサシンクリードのオタクなのですが（唐突）、一番好きなアサシンは[アサシンクリードヴァルハラ(#PR)](https://amzn.to/4mVlsEw)の主人公であるエイヴォル（♀）です。
 
