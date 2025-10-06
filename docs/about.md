@@ -8,6 +8,6 @@ permalink: /about/
 
 握っている EDH のデッキ
 - [エツィオ・アウディトーレ・ダ・フィレンツェ統率者の暗殺者部族デッキ(ブラケット2)]({{ site.baseurl }}/articles/ezio/)
-- <span class="card-hover" data-scry="acr/54/ja">狼に祝福されし者、エイヴォル</span>統率者の人を殴って英雄譚を出すエンチャントレスデッキ(ブラケット3)
+- [狼に祝福されし者、エイヴォル統率者の人を殴って英雄譚を出すエンチャントレスデッキ(ブラケット3)]({{ site.baseurl}}/articles/eivor/)
 - <span class="card-hover" data-scry="acr/63/ja">シャオ・ユン</span>統率者のアーティファクトを投げまくるコンボデッキ(ブラケット4)
 - <span class="card-hover" data-scry="cmm/341/ja">災いの歌姫、ジュディス</span>統率者のいるだけで人に迷惑をかけるアリストクラッツデッキ(ブラケット2)
